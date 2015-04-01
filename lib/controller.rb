@@ -11,10 +11,10 @@ class Run
     while true
       puts "(View) all decks, (Add) a card to a deck, (Remove) a card, (Play) a deck, (Quit)"
       case gets.chomp.to_s.downcase
-      when "list"
-	@arena.list_gladiators
+      when "view"
+		list_decks
       when "add"
-	@arena.add_gladiator
+		
       when "remove"
 	@arena.remove_gladiator
       when "play"
