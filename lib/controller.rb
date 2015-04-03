@@ -50,17 +50,21 @@ class Run
 
 					when "edit"
 						@user.list_my_decks
-						@user.edit_deck
+							if @user.decks.count == 0
+								menu
+							else
+								@user.edit_deck
+							end
 
 					when "delete"
 						@user.list_my_decks
-						@deck = get_deck
-						if @deck == nil
-							menu
-						else
-						@deck.delete
-						program_puts("Like it never existed...")
-						end
+							if @user.decks.count == 0
+								menu
+							else
+								@deck = get_deck
+								@deck.delete
+								program_puts("Like it never existed...")
+							end
 						
 					when "play"
 						list_decks	
