@@ -1,5 +1,4 @@
 require 'active_record'
-require_relative '../indent_string.rb'
 require_relative 'controller.rb'
 require_relative 'methods.rb'
 # require 'pry'
@@ -34,6 +33,7 @@ class CreateTables < ActiveRecord::Migration
 			column.belongs_to :deck
 			column.integer :total_correct
 			column.integer :missed, array: true, default: []
+			column.integer :paused_at, default: nil
 			column.datetime :timestamp, default: Time.now
 		end
 
@@ -84,18 +84,70 @@ class User < ActiveRecord::Base
 				program_puts("ID: #{deck.id} // Created by: #{User.find(deck.user_id).name}")
 				program_puts("Name: #{deck.name}")
 				program_puts("Description: #{deck.description}")
-				program_puts("------")
+				program_puts("---")
 			end
+		end
+	end
+
+	def resume_game
+		program_puts("#{name}'s Games In Progress")
+		program_puts("---")
+		games.each do |game|
+			if game.paused_at != nil
+				program_puts("(ID: #{game.id}) #{game.timestamp} // Deck: #{game.deck.name} // Correct answers so far: #{game.total_correct} // Incorrect answers so far: #{game.missed.count}")
+				@paused_game_exists = "yes"
+			end
+		end
+
+		if @paused_game_exists != "yes"
+			program_puts("Psych!!! You don't have any games in progress!")
+		else
+			program_puts("Which game? Type its ID to resume.")
+			input = gets().chomp().to_i()
+			@game = Game.find(input)
+			start_again(@game)
+		end
+	end
+
+	def start_again(game)
+		@game = game
+		@deck = Deck.find(@game.deck_id)
+		start_index = @game.paused_at 
+		catch (:done)  do
+			@deck.cards.each_with_index do |card, index|
+				if index < start_index 
+					puts("Skipping...")
+				elsif index >= start_index
+					program_puts("#{card.q}")
+					input = gets().chomp().to_s().downcase()
+
+					if input == card.a.downcase
+						program_puts("Correct!")
+						@game.total_correct = @game.total_correct + 1
+					elsif input == "pause"
+						@game.paused_at = index
+						@game.save
+						program_puts("Game paused! To resume, visit (resume) on the main menu.")
+						throw :done
+					else
+						program_puts("Whoops...")
+						@game.missed << card.id
+					end
+				end
+			end
+			@deck.end_game(@game)
 		end
 	end
 
 	def history
 		program_puts("#{name}'s Recent Games")
 		program_puts("---")
+
 		games.each do |game|
 			program_puts(">> #{game.timestamp} // Deck: #{game.deck.name} // Correct answers: #{game.total_correct} // Incorrect answers: #{game.missed.count}")
 		end
 	end
+
 end
 
 class Deck < ActiveRecord::Base
@@ -103,10 +155,6 @@ class Deck < ActiveRecord::Base
 	has_many :games, dependent: :destroy
 	belongs_to :user
 	validates :name, presence: true
-
-	def to_s
-		return name
-	end
 
 	def list_cards
 		if cards.empty?
@@ -126,11 +174,11 @@ class Deck < ActiveRecord::Base
 	def add_card(q = nil, a = nil)
 		if q == nil
 			program_puts("Enter the Q-side or 'question' for this card.")
-			q = gets().chomp()
+			q = gets().chomp().to_s()
 		end
 		if a == nil
 			program_puts("Enter the A-side or 'answer' for this card.")
-			a = gets().chomp()
+			a = gets().chomp().to_s()
 		end
 		cards << Card.new(q: q, a: a)
 
@@ -139,7 +187,7 @@ class Deck < ActiveRecord::Base
 		if input == "add"
 			add_card
 		else
-			program_puts("Ok cool")
+			program_puts("Ok cool.")
 		end
 	end
 
@@ -147,7 +195,7 @@ class Deck < ActiveRecord::Base
 		if q == nil
 			list_cards
 			program_puts("Enter the Q-side or 'question' of the card.")
-			card = gets().chomp()
+			card = gets().chomp().to_s()
 		end
 		cards.find_by(q: card)
 	end
@@ -167,17 +215,17 @@ class Deck < ActiveRecord::Base
 
 			if input == "q"
 				program_puts("Enter the updated Q-side or 'question' for this card.")
-				q = gets().chomp()
+				q = gets().chomp().to_s()
 				card.update(q: q)
 			elsif input == "a"
 				program_puts("Enter the updated A-side or 'answer' for this card.")
-				a = gets().chomp()
+				a = gets().chomp().to_s()
 				card.update(a: a)
 			elsif input == "both"
 				program_puts("Enter the updated Q-side or 'question' for this card.")
-				q = gets().chomp()
+				q = gets().chomp().to_s()
 				program_puts("Enter the updated A-side or 'answer' for this card.")
-				a = gets().chomp()
+				a = gets().chomp().to_s()
 				card.update(q: q, a: a)
 			else
 				program_puts("I wasn't sure what you wanted to edit.")
@@ -186,29 +234,46 @@ class Deck < ActiveRecord::Base
 	end
 
 	def play(user_id)
+
 		@game = Game.new(user_id: user_id, deck_id: id, total_correct: 0)
 		program_puts("-----GAME START-----")
 		program_puts(description)
+		program_puts("(Pause) at any time; your progress will be saved.")
 		iterate
-		program_puts("-----GAME OVER-----")
-		@game.update(timestamp: Time.now)
-		@game.save
-		@game.summarize
 	end
 
 	def iterate
-		cards.each do |card|
-			program_puts("#{card.q}")
-			input = gets().chomp().downcase
+		catch (:done)  do
+			cards.each_with_index do |card, index|
+				program_puts("#{card.q}")
+				input = gets().chomp().to_s().downcase()
+				if input == card.a.downcase
+					program_puts("Correct!")
+					@game.total_correct = @game.total_correct + 1
+				elsif input == "pause"
+					@game.paused_at = index
+					@game.save
+					program_puts("Game paused! To resume, visit (resume) on the main menu.")
+					throw :done
+				else
+					program_puts("Whoops...")
+					@game.missed << card.id
+				end
+			end
 
-			if input == card.a.downcase
-				program_puts("Correct!")
-				@game.total_correct = @game.total_correct + 1
-			else
-				program_puts("Whoops...")
-				@game.missed << card.id
+			if @game.total_correct + @game.missed.count == cards.count
+				end_game(@game)
 			end
 		end
+	end
+
+	def end_game(game)
+		@game = game
+		program_puts("-----GAME OVER-----")
+		@game.update(timestamp: Time.now)
+		@game.update(paused_at: nil)
+		@game.save
+		@game.summarize
 	end
 
 	def leaderboard
@@ -224,9 +289,6 @@ class Card < ActiveRecord::Base
 	belongs_to :deck
 	validates :deck, presence: true
 
-	def to_s
-		return q
-	end
 end
 
 class Game < ActiveRecord::Base

@@ -20,6 +20,7 @@ class Run
 			    program_puts("(Edit) a deck")
 				program_puts("(Delete) a deck")
 				program_puts("(Play) a deck")
+				program_puts("(Resume) a game")
 				program_puts("(Switch) users")
 				program_puts("(Quit)")
 
@@ -61,6 +62,9 @@ class Run
 						list_decks
 						@deck = get_deck
 						@deck.play(@user.id)
+
+					when "resume"
+						@user.resume_game
 
 					when "switch"
 						choose_user

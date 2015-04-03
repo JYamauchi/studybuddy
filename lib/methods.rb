@@ -1,4 +1,5 @@
 #StudyBuddy misc methods that don't belong to a Class	
+require_relative '../indent_string.rb'
 
 	def program_puts(string)
 		puts("\033[32m#{string.indent(4)}\033[0m\n")
