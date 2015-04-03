@@ -1,52 +1,31 @@
-require_relative "../controller.rb"
+require_relative '../models'
 
-describe "flash card game" do
 
-  it "has one player"
+describe Card do
 
-  it "has a random sequence of cards"
+  it "has a question" do
+    card = Card.new(q: "hi", a: "sup")
+    expect(card.q).to eq("hi")
+  end
 
-  context "when complete" do
-    
-    it "has a total number of correct answers"
-
-    it "has a record of incorrect answers"
-    
+  it "has an answer" do
+    card = Card.new(q: "hi", a: "sup")
+    expect(card.a).to eq("sup")
   end
 
 end
 
-describe "card" do
+describe Deck do
 
-  it "has a question"
+  it "has a name" do
+    deck = Deck.new(name: "Test deck", description: "This deck is full of questions about tests")
+    expect(deck.name).to eq("Test deck")
+  end
 
-  it "has an answer"
-
-  it "may belong to one deck"
-
-  it "has a status"
-
-end
-
-describe "deck" do
-
-  it "has many cards"
-
-  it "has a randomized order of cards"
-
-  it "has an author"
-
-  it "has many games"
-
-end
-
-describe "player" do
-
-  it "has a name"
-
-  it "has a game history"
-
-  it "has many games"
+    it "has a description" do
+    deck = Deck.new(name: "Test deck", description: "This deck is full of questions about tests")
+    expect(deck.description).to eq("Test deck")
+  end
 
 end
 

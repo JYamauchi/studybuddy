@@ -6,7 +6,7 @@ class Run
 	def initialize
 		title
 		program_puts("Welcome! Sign in as an existing user or create a new user:")
-		choose_user
+		choose_user 
 	end
 
 	def menu

@@ -48,7 +48,7 @@ StudyBuddy is a flash card sharing and organization system. Users can:
 
 ## ERD
 	
-* The ERD for this program is included as an image, erd.jpg
+* The ERD for this program is included as an image, erd.png
 
 
 

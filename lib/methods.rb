@@ -19,7 +19,17 @@ require_relative '../indent_string.rb'
 	def get_deck
 		program_puts("Which deck? Enter its ID number.")
 		deck_id = gets().chomp().to_i()
-		return Deck.find(deck_id)
+		valid_ids = []
+		Deck.all.each do |deck|
+			valid_ids << deck.id
+		end
+
+		if valid_ids.include? deck_id
+			return Deck.find(deck_id)
+		else
+			program_puts("Whatchu talkin' bout?")
+			menu
+		end
 	end
 
 
