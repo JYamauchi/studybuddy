@@ -28,7 +28,6 @@ require_relative '../indent_string.rb'
 			return Deck.find(deck_id)
 		else
 			program_puts("Whatchu talkin' bout?")
-			menu
 		end
 	end
 

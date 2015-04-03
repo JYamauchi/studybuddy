@@ -56,21 +56,25 @@ class User < ActiveRecord::Base
 
 	def edit_deck
 	@deck = get_deck
-	@deck.list_cards
-	program_puts("(Add) a new card, (Update) an existing card, or (Delete) a card")
-	program_puts("Or (Back) to the main menu")
-	input = gets().chomp().downcase()
-		case input
-			when "add"
-				@deck.add_card
-			when "update"
-				@deck.update_card
-			when "delete"
-				@deck.remove_card
-			when "back"
-				
-			else
-				program_puts("I don't know what you're trying to tell me!")
+	if @deck == nil
+		return
+	else
+		@deck.list_cards
+		program_puts("(Add) a new card, (Update) an existing card, or (Delete) a card")
+		program_puts("Or (Back) to the main menu")
+		input = gets().chomp().downcase()
+			case input
+				when "add"
+					@deck.add_card
+				when "update"
+					@deck.update_card
+				when "delete"
+					@deck.remove_card
+				when "back"
+					
+				else
+					program_puts("I don't know what you're trying to tell me!")
+			end
 		end
 	end
 
