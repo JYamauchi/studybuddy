@@ -35,7 +35,7 @@ StudyBuddy is a flash card sharing and organization system. Users can:
 
 ## User Stories and Project Tasks
 	
-* For a list of user stories describing the program's behavior, please see the 'userstories.txt' file.
+* For a list of user stories describing the program's behavior, please see the 'userstories.md' file.
 * For a look at how I divided up the pieces of the program, here's my Trello board: https://trello.com/b/rsQsfbyg/julia-s-flash-cards
  * You'll notice there are a few features I didn't have time to implement. Maybe someday...
 
