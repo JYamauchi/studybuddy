@@ -147,8 +147,12 @@ class User < ActiveRecord::Base
 		program_puts("#{name}'s Recent Games")
 		program_puts("---")
 
-		games.each do |game|
-			program_puts(">> #{game.timestamp} // Deck: #{game.deck.name} // Correct answers: #{game.total_correct} // Incorrect answers: #{game.missed.count}")
+		if games.count == 0
+			program_puts("Your history is empty because you haven't played any games yet!")
+		else
+			games.each do |game|
+				program_puts(">> #{game.timestamp} // Deck: #{Deck.find(game.deck_id).name} // Correct answers: #{game.total_correct} // Incorrect answers: #{game.missed.count}")
+			end
 		end
 	end
 
