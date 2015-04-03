@@ -55,13 +55,21 @@ class Run
 					when "delete"
 						@user.list_my_decks
 						@deck = get_deck
+						if @deck == nil
+							menu
+						else
 						@deck.delete
 						program_puts("Like it never existed...")
+						end
 						
 					when "play"
-						list_decks
+						list_decks	
 						@deck = get_deck
-						@deck.play(@user.id)
+						if @deck == nil
+							menu
+						else
+							@deck.play(@user.id)
+						end
 
 					when "resume"
 						@user.resume_game

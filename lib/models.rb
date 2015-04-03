@@ -238,7 +238,6 @@ class Deck < ActiveRecord::Base
 	end
 
 	def play(user_id)
-
 		@game = Game.new(user_id: user_id, deck_id: id, total_correct: 0)
 		program_puts("-----GAME START-----")
 		program_puts(description)
