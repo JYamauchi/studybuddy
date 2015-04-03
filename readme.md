@@ -1,48 +1,54 @@
 ```
-      ,gg,                                             ,ggggggggggg,                                                 
-     i8""8i     I8                        8I          dP"""88""""""Y8,                     8I          8I            
-     `8,,8'     I8                        8I          Yb,  88      `8b                     8I          8I            
-      `88'   88888888                     8I           `"  88      ,8P                     8I          8I            
-      dP"8,     I8                        8I               88aaaad8P"                      8I          8I            
-     dP' `8a    I8    gg      gg    ,gggg,8I  gg     gg    88""""Y8ba  gg      gg    ,gggg,8I    ,gggg,8I  gg     gg 
-    dP'   `Yb   I8    I8      8I   dP"  "Y8I  I8     8I    88      `8b I8      8I   dP"  "Y8I   dP"  "Y8I  I8     8I 
-_ ,dP'     I8  ,I8,   I8,    ,8I  i8'    ,8I  I8,   ,8I    88      ,8P I8,    ,8I  i8'    ,8I  i8'    ,8I  I8,   ,8I 
-"888,,____,dP ,d88b, ,d8b,  ,d8b,,d8,   ,d8b,,d8b, ,d8I    88_____,d8',d8b,  ,d8b,,d8,   ,d8b,,d8,   ,d8b,,d8b, ,d8I 
-a8P"Y88888P" 88P""Y888P'"Y88P"`Y8P"Y8888P"`Y8P""Y88P"888  88888888P"  8P'"Y88P"`Y8P"Y8888P"`Y8P"Y8888P"`Y8P""Y88P"888
-                                                   ,d8I'                                                        ,d8I'
-                                                 ,dP'8I                                                       ,dP'8I 
-                                                ,8"  8I                                                      ,8"  8I 
-                                                I8   8I                                                      I8   8I 
-                                                `8, ,8I                                                      `8, ,8I 
-                                                 `Y8P"                                                        `Y8P"  
- 
-                                                        
+   _____ __            __      ____            __    __     
+  / ___// /___  ______/ /_  __/ __ )__  ______/ /___/ /_  __
+  \__ \/ __/ / / / __  / / / / __  / / / / __  / __  / / / /
+ ___/ / /_/ /_/ / /_/ / /_/ / /_/ / /_/ / /_/ / /_/ / /_/ / 
+/____/\__/\__,_/\__,_/\__, /_____/\__,_/\__,_/\__,_/\__, /  
+                     /____/                        /____/                                              
 ```
 
-In addition to being an expert programmer, you're now the Question Master of all things web-dev
+StudyBuddy is a flash card sharing and organization system. Users can:
 
-Design a flashcard management application, used in the command line, in which you allow users to create, read, update, and delete flashcards.
+	-create decks of flash cards
+	-share decks with other users and browse other users' decks
+	-edit or delete only decks that they themselves created
+	-compete with other users on leaderboards
+	-view their personal 'recently played games' history
+	-pause and resume games
 
-## Gameplay
+## Instructions
 
-- When starting the application, prompt the user to:
-  - Create a new flashcard
-  - View all flashcards
-  - Edit a flashcard
-  - Delete a flashcard
-  - View score / recent answers
+	-Navigate to /studybuddy/lib/ in the Terminal
+	-Run $ ruby studybuddy.rb
+	-Sign in as an existing user by typing one of the listed names, or type "new" to add a new user
+	-In the main menu, browse existing decks by typing "view"
+		-From the deck list, type "cards" to see the individual question cards within each deck
+		-Type "leaderboards" to see the list of users who have played each deck, ranked from highest-scoring to lowest
+	-Typing "history" will show the list of games you've played recently and how you scored on them
+	-Typing "edit" will allow you to make changes to cards within decks you've created (you can't alter decks created by other users)
+	-Typing "delete" will allow you to delete decks you've created (same limitation applies!)
+	-Typing "play" brings up the list of decks and allows you to start a game
+	-Typing "resume" will bring up a list of games you've paused midway and allow you to continue playing them
+	-Typing "switch" brings back the list of users and allows someone else to sign in
+	-Typing "quit" ends the program.
 
-## Requirements
 
-- The player should be able to quit the command line and resume their game later.
-- The player should be able to see their score and how many cards/questions they got right.
-- Allow users to create lists or categories of flashcards.
-- Allow users to view only the flashcards in one particular category or another.
+## User Stories and Project Tasks
+	
+	-For a list of user stories describing the program's behavior, please see the 'userstories.txt' file.
+	-For a look at how I divided up the pieces of the program, here's my Trello board: https://trello.com/b/rsQsfbyg/julia-s-flash-cards
+		-You'll notice there are a few features I didn't have time to implement. Maybe someday...
+
+	
+## Testing
+
+	-RSpec tests are included in the 'studybuddy_spec.rb' file within the directory /studybuddy/spec/
+	-To run these, navigate to the main /studybuddy/ directory in the Terminal and run $ rspec
 
 
+## ERD
+	
+	-The ERD for this program is included as an image, erd.jpg
 
-## Bonus
 
-- If the user does not get a question right, add that card back in to the mix and keep asking until they get it right.
-- Record the number of attempts a user makes to answer a question.
 
